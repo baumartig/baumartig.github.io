@@ -7,6 +7,16 @@ layout: default
   <h1 class="page-heading">Projects</h1>
 
   <ul class="post-list">
+    {% for page in site.pages %}
+        {% if page.title %}
+        <li>
+          <h2>
+            <a class="post-link" href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a> 
+        </h2>
+      </li>
+        {% endif %}
+    {% endfor %}
+<!--
     {% for post in site.projects limit:10 %}
       <li>
         <h2>
@@ -14,6 +24,7 @@ layout: default
         </h2>
       </li>
     {% endfor %}
+-->
   </ul>
 
 </div>

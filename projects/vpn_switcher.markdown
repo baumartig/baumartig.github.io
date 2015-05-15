@@ -33,32 +33,6 @@ Here the python stuff we need
 
 Here we have to put the VPN Configuration files from our provider in the "/etc/openvpn/" folder. Each config file must also be edited to allow the forwarding and the authorization.
 
-
-
-## Squid 
-
-Squid is hour proxy server with which I had good results to circumvent the location detection of Netflix. This solution is for my PC which had problems when only using the gateway. The TV for example has no such problems.
-
-This is my config which lies under "/etc/squid3/squid.conf":
-
-    #basic config
-    http_port 192.168.1.161:3128
-    cache_mem 256 MB
-    maximum_object_size 10000 KB
-    maximum_object_size_in_memory 64 KB
-    cache_replacement_policy heap LFUDA
-    memory_replacement_policy heap GDSF
-    
-    #anonymisation
-    via off
-    forwarded_for off
-    
-    #permissions
-    acl silvercloud src 192.168.1.0/24
-    http_access allow silvercloud
-
-You may want to change the ips to reflect your own network. An important block is under anonymisation which hides thah the client goes throung a proxy.
-
 ## Bind9
 
 Bind9 is hour dns server to which we use to circumvent location blocking via the given dns server.
@@ -148,3 +122,33 @@ And we make it belong to the root and executable.
 To prepare the kernel for ip forwarding we must uncomment the following line in the file "/etc/sysctl.conf" :
 
     net.ipv4.ip_forward = 1
+    
+    
+# Obsolete Steps
+
+
+## Squid 
+
+> I needet this part in an earlyer version where I had problems whith hiding my location in Netflix on PC browsers. It seems that this is no longer the case, therefor this part is obsolete but remains here for nostalgical reasons.
+
+Squid is hour proxy server with which I had good results to circumvent the location detection of Netflix. This solution is for my PC which had problems when only using the gateway. The TV for example has no such problems.
+
+This is my config which lies under "/etc/squid3/squid.conf":
+
+    #basic config
+    http_port 192.168.1.161:3128
+    cache_mem 256 MB
+    maximum_object_size 10000 KB
+    maximum_object_size_in_memory 64 KB
+    cache_replacement_policy heap LFUDA
+    memory_replacement_policy heap GDSF
+    
+    #anonymisation
+    via off
+    forwarded_for off
+    
+    #permissions
+    acl silvercloud src 192.168.1.0/24
+    http_access allow silvercloud
+
+You may want to change the ips to reflect your own network. An important block is under anonymisation which hides thah the client goes throung a proxy.

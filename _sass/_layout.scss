@@ -163,6 +163,8 @@
  */
 .page-content {
     padding: $spacing-unit 0;
+    background-image: url($background-image);
+    background-repeat: repeat;
 }
 
 .page-heading {
@@ -234,3 +236,42 @@
         }
     }
 }
+
+.post {
+    background: orange;
+    padding: 10px;
+    border-radius: 3px;
+    border: 1px solid orange;
+}
+
+.post-link { 
+    position: relative; 
+    width: 100%; /* for IE 6 */
+    height: 200px;
+}
+
+h2.post-title { 
+   position: absolute; 
+   top: 75px; 
+   left: 0; 
+}
+
+h2.post-title span { 
+   color: white; 
+   font: bold 24px/45px Helvetica, Sans-Serif; 
+   letter-spacing: -1px;  
+   background: rgb(0, 0, 0); /* fallback color */
+   background: rgba(0, 0, 0, 0.7);
+   padding: 10px; 
+}
+
+h1.post-title { 
+   color: white; 
+   font: bold 24px/45px Helvetica, Sans-Serif; 
+   letter-spacing: -1px;  
+   background: rgb(0, 0, 0); /* fallback color */
+   background: rgba(0, 0, 0, 0.7);
+   padding: 10px; 
+}
+
+

@@ -1,7 +1,8 @@
 ---
 layout: post
 title:  "VPN Switcher"
-date:   2015-02-15 13:47:20
+date:   2015-02-15 13:47
+picture: images/button.jpg
 ---
 
 # Targets of this project

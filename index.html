@@ -4,15 +4,14 @@ layout: default
 
 <div class="home">
 
-  <h1 class="page-heading">Projects</h1>
-
   <ul class="post-list">
     {% for page in site.pages %}
         {% if page.title %}
         <li>
-          <h2>
-            <a class="post-link" href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a> 
-        </h2>
+          <a class="post-link" href="{{ page.url | prepend: site.baseurl }}">
+            <h2 class="post-title" ><span>{{ page.title }}</span></h2>
+            <img class="post-picture" src="{{ page.picture }}" >
+          </a> 
       </li>
         {% endif %}
     {% endfor %}

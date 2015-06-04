@@ -7,11 +7,12 @@ picture: images/button.jpg
 
 # Targets of this project
 
-The project should allow any device on my network to easyly switch beween multiple vpn networks. To accieve this I have decidet to use a raspberry pi as a vpn gateway. For easy switching I am adding simple switches. Like this:
+The project should allow any device on my network to easily switch between multiple VPN networks. To achieve this I have decided to use a raspberry pi as a VPN gateway. For easy switching I am adding simple switches. Like this:
 
-TODO insert picture of button
+![Tactile Switches](/images/Tactile_switches.jpg)
 
-The Software I whill be using for this project are:
+In the first part I will cover the software side of this project before I talk about simplifying the switching of the vpns with hardware buttons.
+The Software I will be using for this project are:
 
 * openvpn
 * squid
@@ -23,7 +24,7 @@ The Software I whill be using for this project are:
 To prepare the pi we have to install some packages:
     apt-get install openvpn squid3 bind9
 
-* openvpn is used for our vpn connections
+* openvpn is used for our VPN connections
 * squid3 is our proxy server
 
 Here the python stuff we need
@@ -34,21 +35,29 @@ Here the python stuff we need
 
 Here we have to put the VPN Configuration files from our provider in the "/etc/openvpn/" folder. Each config file must also be edited to allow the forwarding and the authorization.
 
+For the forwarding add the lines:
+
+    up /etc/openvpn/update-resolv-conf
+    down /etc/openvpn/update-resolv-conf
+    redirect-gateway
+    
+For the authentication i use the
+
 ## Bind9
 
-Bind9 is hour dns server to which we use to circumvent location blocking via the given dns server.
+Bind9 is our dns server to which we use to circumvent location blocking via the given dns server.
 
 The important bind9 config is "/etc/bind/named.conf.options" here we add under "forwarders" the DNS server ips from our VPN provider.
 
     options {
             directory "/var/cache/bind";
     
-            // If there is a firewall between you and nameservers you want
+            // If there is a firewall between you and name-servers you want
             // to talk to, you may need to fix the firewall to allow multiple
             // ports to talk.  See http://www.kb.cert.org/vuls/id/800113
     
             // If your ISP provided one or more IP addresses for stable
-            // nameservers, you probably want to use them as forwarders.
+            // name-servers, you probably want to use them as forwarders.
             // Uncomment the following block, and insert the addresses replacing
             // the all-0's placeholder.
     
@@ -76,7 +85,7 @@ The important bind9 config is "/etc/bind/named.conf.options" here we add under "
 
 ## Iptables
 
-To redirect the traffic to the vpn connection we need iptables. We store the following configuration under "/etc/iptable.up.rules"
+To redirect the traffic to the VPN connection we need iptables. We store the following configuration under "/etc/iptable.up.rules"
 
     *nat
     :PREROUTING ACCEPT [1:148]
@@ -108,7 +117,7 @@ To redirect the traffic to the vpn connection we need iptables. We store the fol
     -A OUTPUT -j ACCEPT
     COMMIT
 
-To load the rules on the network startup we write a script under "/etc/network/if-pre-up.d/" which contains the following:
+To load the rules on the network start up we write a script under "/etc/network/if-pre-up.d/" which contains the following:
 
     #!/bin/bash
     /sbin/iptables-restore < /etc/iptables.up.rules
@@ -120,9 +129,23 @@ And we make it belong to the root and executable.
     
 ## Kernel
 
-To prepare the kernel for ip forwarding we must uncomment the following line in the file "/etc/sysctl.conf" :
+To prepare the kernel for IP forwarding we must uncomment the following line in the file "/etc/sysctl.conf" :
 
     net.ipv4.ip_forward = 1
+    
+# The hardware stuff
+
+![Breadboard prototype](/images/Breadboard.jpg)
+
+![Switches complete](/images/Switches_gesamt.jpg)
+
+![Breadboard bottom](/images/Lochrasterplatine_unterseite.jpg)
+
+![Breadboard top](/images/Lochrasterplatine_oberseite.jpg)
+
+## Things that did not work
+
+When I switched the raspberry pi for the more capable banana pi I became a problem with a switch that wouldn't work. The hardware part was fine and I could even see the button press with the wiringpi tool "gpio" with the "readall" argument. Only Python would not register the edge on the pin 7 and 5. So I have to switch the button to the pin 19.
     
     
 # Obsolete Steps
@@ -130,7 +153,7 @@ To prepare the kernel for ip forwarding we must uncomment the following line in 
 
 ## Squid 
 
-> I needet this part in an earlyer version where I had problems whith hiding my location in Netflix on PC browsers. It seems that this is no longer the case, therefor this part is obsolete but remains here for nostalgical reasons.
+> I needed this part in an earlyer version where I had problems with hiding my location in Netflix on PC browsers. It seems that this is no longer the case, therefor this part is obsolete but remains here for nostalgic reasons.
 
 Squid is hour proxy server with which I had good results to circumvent the location detection of Netflix. This solution is for my PC which had problems when only using the gateway. The TV for example has no such problems.
 
@@ -152,4 +175,4 @@ This is my config which lies under "/etc/squid3/squid.conf":
     acl silvercloud src 192.168.1.0/24
     http_access allow silvercloud
 
-You may want to change the ips to reflect your own network. An important block is under anonymisation which hides thah the client goes throung a proxy.
+You may want to change the ips to reflect your own network. An important block is under anonymisation which hides that the client goes throung a proxy.

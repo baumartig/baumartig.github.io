@@ -41,7 +41,11 @@ For the forwarding add the lines:
     down /etc/openvpn/update-resolv-conf
     redirect-gateway
     
-For the authentication i use the
+For the authentication I use the a central file which you can specify with this line:
+
+    auth-user-pass /etc/openvpn/user.txt
+
+This file contains the user name in the first line and the password in the second line.
 
 ## Bind9
 
